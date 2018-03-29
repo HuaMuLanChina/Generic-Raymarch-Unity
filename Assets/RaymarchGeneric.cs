@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#define GLSL_SHADING
+using UnityEngine;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(Camera))]
@@ -17,21 +18,8 @@ public class RaymarchGeneric : SceneViewFilter
     private float _RaymarchDrawDistance = 40;
     [SerializeField]
     private bool _DebugPerformance = false;
-
-    public Material EffectMaterial
-    {
-        get
-        {
-            if (!_EffectMaterial && _EffectShader)
-            {
-                _EffectMaterial = new Material(_EffectShader);
-                _EffectMaterial.hideFlags = HideFlags.HideAndDontSave;
-            }
-
-            return _EffectMaterial;
-        }
-    }
-    private Material _EffectMaterial;
+    [SerializeField]
+    public Material EffectMaterial;
 
     public Camera CurrentCamera
     {
@@ -49,6 +37,9 @@ public class RaymarchGeneric : SceneViewFilter
         Gizmos.color = Color.green;
 
         Matrix4x4 corners = GetFrustumCorners(CurrentCamera);
+#if GLSL_SHADING
+        corners = corners.transpose;
+#endif
         Vector3 pos = CurrentCamera.transform.position;
 
         for (int x = 0; x < 4; x++) {
@@ -151,6 +142,9 @@ public class RaymarchGeneric : SceneViewFilter
         frustumCorners.SetRow(1, topRight);
         frustumCorners.SetRow(2, bottomRight);
         frustumCorners.SetRow(3, bottomLeft);
+#if GLSL_SHADING
+        frustumCorners = frustumCorners.transpose;
+#endif
 
         return frustumCorners;
     }

@@ -1,4 +1,6 @@
-﻿Shader "Hidden/RaymarchGeneric"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Hidden/RaymarchGeneric"
 {
 	Properties
 	{
@@ -62,13 +64,8 @@
 				half index = v.vertex.z;
 				v.vertex.z = 0.1;
 				
-				o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.pos = UnityObjectToClipPos(v.vertex);
 				o.uv = v.uv.xy;
-				
-				#if UNITY_UV_STARTS_AT_TOP
-				if (_MainTex_TexelSize.y < 0)
-					o.uv.y = 1 - o.uv.y;
-				#endif
 
 				// Get the eyespace view ray (normalized)
 				o.ray = _FrustumCornersES[(int)index].xyz;
@@ -191,10 +188,6 @@
 				float3 ro = _CameraWS;
 
 				float2 duv = i.uv;
-				#if UNITY_UV_STARTS_AT_TOP
-				if (_MainTex_TexelSize.y < 0)
-					duv.y = 1 - duv.y;
-				#endif
 
 				// Convert from depth buffer (eye space) to true distance from camera
 				// This is done by multiplying the eyespace depth by the length of the "z-normalized"

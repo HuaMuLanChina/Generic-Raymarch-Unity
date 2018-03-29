@@ -90,6 +90,18 @@ float sdEllipsoid(in float3 p, in float3 r)
 	return (length(p / r) - 1.0) * min(min(r.x, r.y), r.z);
 }
 
+float sdEllipsoid( in float2 p, in float2 c, in float2 r )
+{
+    return (length( (p-c)/r ) - 1.0) * min(r.x,r.y);
+}
+
+float2 udSegment( float3 p, float3 a, float3 b )
+{
+	float3 pa = p-a, ba = b-a;
+	float h = clamp( dot(pa,ba)/dot(ba,ba), 0.0, 1.0 );
+	return float2( length( pa - ba*h ), h );
+}
+
 // BOOLEAN OPERATIONS //
 // Apply these operations to multiple "primitive" distance functions to create complex shapes.
 
