@@ -734,8 +734,9 @@ Shader "Shadertoy/snailGLSL" {
 					vec3 tmp = texture(iChannel2, uv*0.25 + 0.0075*of, 4.0).yxz;
 					col = smax(col, tmp, 0.5);
 				}
-
+				col = texture(iChannel2, uv, 0.0).yxz;
 				return pow(col,vec3(3.5,3.0,6.0))*0.2;
+				//return col;
 			}
 
 
@@ -745,7 +746,7 @@ Shader "Shadertoy/snailGLSL" {
 
 				vec3 col = background(rd);
 
-				//-----------------------------
+				////-----------------------------
 
 				float mindist = 1.0;
 				float maxdist = 4.0;
@@ -758,26 +759,26 @@ Shader "Shadertoy/snailGLSL" {
 					maxdist = tm.x;
 				}
 
-				//-----------------------------
-				
-				tm = intersectTransparent( ro, rd, mindist, maxdist, matInfo );
-				if( tm.y>-0.5 && tm.x < maxdist )
-				{
-					col = shadeTransparent( ro, rd, tm.x, tm.y, matInfo, col, maxdist );
-				}
+				////-----------------------------
+				//
+				//tm = intersectTransparent( ro, rd, mindist, maxdist, matInfo );
+				//if( tm.y>-0.5 && tm.x < maxdist )
+				//{
+				//	col = shadeTransparent( ro, rd, tm.x, tm.y, matInfo, col, maxdist );
+				//}
 
-				//-----------------------------
-				
-				float sun = clamp(dot(rd,sunDir),0.0,1.0);
-				col += 1.0*vec3(1.5,0.8,0.7)*pow(sun,4.0);
+				////-----------------------------
+				//
+				//float sun = clamp(dot(rd,sunDir),0.0,1.0);
+				//col += 1.0*vec3(1.5,0.8,0.7)*pow(sun,4.0);
 
-				//-----------------------------
+				////-----------------------------
 
-				col = pow( col, vec3(0.45) );
-				
-				col = vec3(1.05,1.0,1.0)*col*(0.7+0.3*col*(3.0-2.0*col)) + vec3(0.0,0.0,0.04);
+				//col = pow( col, vec3(0.45) );
+				//
+				//col = vec3(1.05,1.0,1.0)*col*(0.7+0.3*col*(3.0-2.0*col)) + vec3(0.0,0.0,0.04);
 
-				col *= 0.3 + 0.7*pow(16.0*q.x*q.y*(1.0-q.x)*(1.0-q.y),0.1);
+				//col *= 0.3 + 0.7*pow(16.0*q.x*q.y*(1.0-q.x)*(1.0-q.y),0.1);
 
 				return clamp(col, 0.0, 1.0);
 			}
@@ -799,7 +800,7 @@ Shader "Shadertoy/snailGLSL" {
 				uv = gl_MultiTexCoord0.xy;
 				LocalPos = gl_Vertex.xyz;
 				ray = _FrustumCornersES[index].xyz;
-				ray /= abs(ray.z);
+				//ray /= abs(ray.z);
 				ray = mat3(_CameraInvViewMatrix) * ray;
 				gl_Position = gl_ModelViewProjectionMatrix * pos;
 			}
